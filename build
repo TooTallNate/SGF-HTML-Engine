@@ -1,0 +1,95 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+var http = require('http');
+var path = require('path');
+var querystring = require('querystring');
+
+
+fs.readdir(path.join(__dirname, 'src'), onReaddir);
+function onReaddir(err, files) {
+  if (err) throw err;
+  console.log(files);
+  files.forEach(function(file) {
+    compile(file, function(err, results) {
+      if (err) console.error(err);
+      else console.log(file, "4)", results);
+    });
+  });
+}
+
+
+
+function compile(src, callback) {
+
+  // First read the contents of the file as a utf8 string
+  var srcPath = path.join(__dirname, 'src', src);
+  console.log(src, "1) Reading File:", srcPath);
+  fs.readFile(srcPath, 'utf8', onRead);
+  function onRead(err, c) {
+    if (err) return callback(err);
+    doClosureCompile(c);
+  }
+
+  // Second we do the actual HTTP POST request to the Closure Compiler url
+  function doClosureCompile(contents) {
+    console.log(contents);
+    var compilerUrl = 'closure-compiler.appspot.com';
+    console.log(src, "2) Writing HTTP POST to:", compilerUrl);
+    var options = {
+      host: compilerUrl,
+      port: 80,
+      method: 'POST',
+      path: '/compile', 
+      headers: {
+        'Host': compilerUrl,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    };
+    var request = http.request(options, onResponse);
+    request.on('error', callback);
+    var post = {
+      'compilation_level': 'ADVANCED_OPTIMIZATIONS',
+      'output_format': 'json',
+      'output_info': ['compiled_code', 'warnings', 'errors', 'statistics'],
+      'js_code': contents
+    };
+    console.log(post);
+    if (process.argv.indexOf('--pretty_print') > 1) {
+      post.formatting = 'pretty_print';
+    }
+    request.end(querystring.stringify(post, '&', '=', false));
+  }
+
+  // Once we get the JSON response, concat it into the 'res' string
+  var res = '';
+  function onResponse(response) {
+    response.setEncoding('utf8');
+    response.on('data', onData);
+    response.on('end', onEnd);
+  }
+  function onData(chunk) { res += chunk; }
+
+  // And once the response is finished, we can parse the JSON, and save
+  // the compiledCode into a result file.
+  var json;
+  function onEnd() {
+    try {
+      json = JSON.parse(res);
+    } catch(err) {
+      return callback(err);
+    }
+    var compiledCode = json.compiledCode;
+    delete json.compiledCode;
+
+    json.outputFilename = path.join(__dirname, path.basename(src));
+    console.log(src, '3) Saving compiled code to:',  json.outputFilename);
+    fs.writeFile(json.outputFilename, compiledCode, onWriteDone);
+  }
+
+  // Finally invoke the callback with the JSON statistics/warnings/errors
+  // returned from the Closure Compiler.
+  function onWriteDone(err) {
+    callback(err, json);
+  }
+}
