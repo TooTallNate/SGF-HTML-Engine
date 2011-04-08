@@ -40,8 +40,8 @@ to create a `Game` instance. Here's a simple example:
         <script type="text/javascript" src="http://html.sgfjs.org/SGF.js"></script>
       </head>
       <body>
-        <div id="gameContainer" style="width:320px; height:240px;">
-        </div>
+        <div id="gameContainer" style="width:320px; height:240px;"></div>
+
         <script type="text/javascript">
           // The 'createGame' function requires the path to an SGF game hosted on an HTTP server,
           // a reference to a DOM container element the game will be rendered inside of, and
@@ -51,10 +51,17 @@ to create a `Game` instance. Here's a simple example:
               // The game could not be created for some reason
               throw err;
             }
-            // the 'game' instance can retceive events that your game creates, including logging,
-            // and user-made events. You can also send events into your game instance, like a 'pause'
-            // event for instance, that would be emitted to the game when an outside <button> is pressed.
-            game.emit('pause');
+
+            // the 'game' instance can receive events that your game creates, including logging,
+            // and user-made events.
+            game.on('log', function(val) {
+              document.getElementById('gameLog').innerHTML += val + "<br>";
+            });
+
+            // You can also send events into your game instance, and pass objects. Useful to
+            // pass info from a form submission, or something.
+            game.emit('login', 'username', 'password');
+
           });
         </script>
       </body>
@@ -92,7 +99,7 @@ Regular testing is done with:
  * Chrome 9+
  * Safari 5+
  * MobileSafari (iOS 4.3+)
- * Internet Explore 6+
+ * Internet Explorer 6+
 
 
 [SGF]: http://sgfjs.org
