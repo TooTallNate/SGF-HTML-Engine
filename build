@@ -47,11 +47,17 @@ function compile(src, callback) {
     };
     var request = http.request(options, onResponse);
     request.on('error', callback);
+    var externs = [
+      'Array.isArray=function(){};',
+      'var module={};',
+      'module.exports=module.main={};',
+      'module.define=module.load=module.provide=function(){}'
+    ];
     var post = {
       'compilation_level': 'ADVANCED_OPTIMIZATIONS',
       'output_format': 'json',
       'output_info': ['compiled_code', 'warnings', 'errors', 'statistics'],
-      'js_externs': 'Array.isArray=function(){}; var module={}; module.exports={}; module.define=module.load=module.provide=function(){}',
+      'js_externs': externs.join(''),
       'js_code': contents
     };
     if (process.argv.indexOf('--pretty_print') > 1) {

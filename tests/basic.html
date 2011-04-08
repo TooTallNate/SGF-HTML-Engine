@@ -10,12 +10,17 @@
     <div id="gameContainer" style="width:320px; height:240px; border:Solid 1px Black">
     </div>
     <script type="text/javascript">
-      var path = './test-game';
+      var path = './game1';
       var container = document.getElementById('gameContainer');
       SGF.createGame(path, container, onGame);
       function onGame(err, game) {
         if (err) throw err;
+
+        console.log("Got 'game' instance at the window");
         console.log(game);
+        //game.on('resume', function() {
+        //  console.log("Got 'resume'!");
+        //});
       }
     </script>
   </body>

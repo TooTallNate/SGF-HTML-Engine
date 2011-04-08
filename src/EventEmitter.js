@@ -23,7 +23,6 @@ EventEmitter.prototype['emit'] = function(type) {
       } else {
         throw new Error("Uncaught, unspecified 'error' event.");
       }
-      return false;
     }
   }
 

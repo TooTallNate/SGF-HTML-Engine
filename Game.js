@@ -1,1 +1,2 @@
-module.load("inherits","./EventEmitter",function(b,c){function a(a,b){this.path=a;this.container=b}b(a,c);module.exports=a});
+module.load("path","inherits","./EventEmitter",function(f,c,d){function a(a,c){this.a=!1;this.path=a;this.container=c;var b=this,d=module.load(f.absolutize(g,a+"/main"),function(){b.emit("start");b.resume()})[0].global,e;for(e in this)"function"===typeof this[e]&&function(a){d[a]=function(){return b[a].apply(b,arguments)}}(e)}var g=f.parse(module.main.id);c(a,d);module.exports=a;a.prototype.isRunning=function(){return this.a};a.prototype.resume=function(){if(!this.a)this.a=!0,this.emit("resume")};
+a.prototype.pause=function(){if(this.a)this.a=!1,this.emit("pause")}});

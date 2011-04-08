@@ -6,6 +6,7 @@
 
   // The 'SGF' namespace.
   var SGF = window['SGF'] = {};
+  module.define('_sgf', SGF);
 
   // We need to get the directory containing this bootstrap script. It's not a
   // usual module (since it get's loaded in a regular <script> tag on the page),
