@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>SGF - HTML Engine - Basic &lt;div&gt; Test</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="../Module.min.js"></script>
+    <script type="text/javascript" src="../SGF.js" id="SGF"></script>
+  </head>
+  <body>
+    <div id="gameContainer" style="width:320px; height:240px; border:Solid 1px Black">
+    </div>
+    <script type="text/javascript">
+      var path = './test-game';
+      var container = document.getElementById('gameContainer');
+      SGF.createGame(path, container, onGame);
+      function onGame(err, game) {
+        if (err) throw err;
+        console.log(game);
+      }
+    </script>
+  </body>
+</html>

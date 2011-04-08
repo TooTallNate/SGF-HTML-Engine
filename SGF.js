@@ -1,1 +1,1 @@
-(function(a){(a.SGF={}).createGame=function(){}})(this);
+(function(b){function c(){}var b=b.SGF={},a=document.getElementById("SGF"),a=a.src,a=a.substring(0,a.lastIndexOf("/"));b.createGame=function(d,b,c){module.load(a+"/Game",function(a){a=new a(d,b);c(null,a)})};module.define("inherits",function(a,b){c.prototype=b.prototype;a.prototype=new c;a.prototype.constructor=a})})(this);
