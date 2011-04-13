@@ -12,6 +12,7 @@ module.load('_sgf', 'path', 'inherits', './EventEmitter', function(SGF, path, in
     this._running = false;
     this['path'] = gameRoot;
     this['container'] = container;
+    this['renderables'] = [];
 
     // The container element's margin and padding need to be nullified
     container.style.margin = container.style.padding = '0px';
@@ -64,6 +65,23 @@ module.load('_sgf', 'path', 'inherits', './EventEmitter', function(SGF, path, in
 
     this._running = false;
     this['emit']('pause');
+  }
+
+  // Add a renderable to the top-level game container.
+  // A renderable may be any Object that contains a 'render'
+  // function, though most of the time it will be a SGF
+  // class like Circle, Rectangle, Sprite, etc.
+  Game.prototype['add'] = function(renderable) {
+    this['renderables'].push(renderable);
+    this['_s'].appendChild(renderable['_e']);
+//    this['on']('render', renderable.render);
+    renderable['parent'] = this;
+  }
+
+  // Remove a renderable that has previously been added to
+  // the game instance with 'add()'.
+  Game.prototype['remove'] = function(renderable) {
+
   }
 
 });

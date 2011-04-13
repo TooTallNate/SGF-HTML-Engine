@@ -15,6 +15,13 @@
   root = root.src;
   root = root.substring(0, root.lastIndexOf('/'));
 
+  // SGF games have access to the public SGF modules at an
+  // "absolute" level, so they should be defined first.
+  module.provide('Circle', root+'/Circle.js');
+  module.provide('EventEmitter', root+'/EventEmitter.js');
+  module.provide('Game', root+'/Game.js');
+  module.provide('Rectangle', root+'/Rectangle.js');
+
 
   // Feature support detection
   //   Rendering engine, should be something like VML for IE<=8, SVG for everyone else
