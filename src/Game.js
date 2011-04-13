@@ -26,6 +26,10 @@ module.load('_sgf', 'path', 'inherits', './EventEmitter', function(SGF, path, in
       self['resume']();
     })[0]['global'];
 
+    // We expose the global scope as 'game'; 'global' may also be used,
+    // or 'this' at the top level of the game's 'main' module
+    global['game'] = global;
+
     // We need to set up 'proxy' functions on the global scope of the
     // game's "main" module. This will give the appearance of this 'Game'
     // intance being the global scope of the main module, but really it's not
