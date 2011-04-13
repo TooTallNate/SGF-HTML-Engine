@@ -1,0 +1,1 @@
+module.load("_sgf","inherits","./Game",function(b,c,d){function a(a,c){d.call(this,a,c);var e=this._s=b._svg("svg",{xmlns:b.SVG_NS,version:"1.1",width:"100%",height:"100%"}),f=b._svg("rect",{x:"0",y:"0",width:"310",height:"220",fill:"#aaaaaa"});e.appendChild(f);this.container.appendChild(this._s)}c(a,d);module.exports=a});

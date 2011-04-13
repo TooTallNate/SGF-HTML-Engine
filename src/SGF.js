@@ -2,7 +2,7 @@
 // 'SGF' object.
 // TODO: Ensure's that ModuleJS is loaded.
 
-(function(window, undefined) {
+(function(window, document, undefined) {
 
   // The 'SGF' namespace.
   var SGF = window['SGF'] = {};
@@ -16,12 +16,31 @@
   root = root.substring(0, root.lastIndexOf('/'));
 
 
+  // Feature support detection
+  //   Rendering engine, should be something like VML for IE<=8, SVG for everyone else
+  SGF['SVG_NS'] = 'http://www.w3.org/2000/svg';
+  SGF['SVG_XL'] = 'http://www.w3.org/1999/xlink';
+  SGF['SVG'] = !!document.createElementNS && !!createSVGElement('svg')['createSVGRect'];
+  SGF['VML'] = false; // TODO
+  var mode = SGF['SVG'] ? 'SVG' : 'VML';
+
+  // Returns a new SVG element of the given type
+  function createSVGElement(type, attrs) {
+    var s = document.createElementNS(SGF['SVG_NS'], type);
+    if (attrs) for (var attr in attrs) {
+      s.setAttribute(attr, attrs[attr]);
+    }
+    return s;
+  }
+  SGF['_svg'] = createSVGElement;
+
+
   // The 'createGame' function should be used to create and return a 'Game' instance
   // based off the given 'path'. The game will be rendered inside of 'container', which
   // should be a DOM element reference usually a <div> or <body>. Optionally, 'callback'
   // will be called when the new 'Game' instance has been created.
   function createGame(path, container, callback) {
-    module.load(root + '/Game', function(Game) {
+    module.load(root + '/' + mode + 'Game', function(Game) {
       var game = new Game(path, container);
       callback(null, game);
     });
@@ -39,4 +58,4 @@
   }
   module.define('inherits', inherits);
 
-})(this);
+})(this, document);

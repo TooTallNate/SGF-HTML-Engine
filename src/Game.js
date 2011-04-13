@@ -1,7 +1,7 @@
 // The main 'Game' class is in charge of the game loop, and is the main
 // 'Container' element for the game.
 
-module.load('path', 'inherits', './EventEmitter', function(path, inherits, EventEmitter) {
+module.load('_sgf', 'path', 'inherits', './EventEmitter', function(SGF, path, inherits, EventEmitter) {
 
   // We need the parsed url of the host page (the html page), so that the
   // game can (may) be loaded from the appropriate relative location
@@ -12,6 +12,9 @@ module.load('path', 'inherits', './EventEmitter', function(path, inherits, Event
     this._running = false;
     this['path'] = gameRoot;
     this['container'] = container;
+
+    // The container element's margin and padding need to be nullified
+    container.style.margin = container.style.padding = '0px';
 
     // So we need to load the 'main.js' of the given game path.
     // Once it's loaded, we'll start the game loop.
@@ -27,7 +30,6 @@ module.load('path', 'inherits', './EventEmitter', function(path, inherits, Event
     // game's "main" module. This will give the appearance of this 'Game'
     // intance being the global scope of the main module, but really it's not
     for (var i in this) {
-      //console.log(i + ": " + typeof(this[i]));
       if ("function" !== typeof this[i]) continue;
       (function(i) {
         global[i] = function() {
