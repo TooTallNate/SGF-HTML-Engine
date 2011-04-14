@@ -13,9 +13,10 @@
       var path = './game1';
       var container = document.getElementById('gameContainer');
       SGF.createGame(path, container, onGame);
-      function onGame(err, game) {
+      function onGame(err, g) {
         if (err) throw err;
 
+        game = g;
         console.log("Got 'game' instance at the window");
         console.log(game);
         game.on('resume', function() {
