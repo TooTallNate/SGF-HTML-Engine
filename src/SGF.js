@@ -14,13 +14,14 @@
   var root = document.getElementById('SGF');
   root = root.src;
   root = root.substring(0, root.lastIndexOf('/'));
+  SGF['root'] = root;
 
   // SGF games have access to the public SGF modules at an
-  // "absolute" level, so they should be defined first.
-  module.provide('Circle', root+'/Circle.js');
+  // "absolute" level, so they should be defined first. Renderable components
+  // get 'provided' inside the 'SVGGame' or 'VMLGame' classes, so that
+  // the game gets the proper version according to the rendering engine.
   module.provide('EventEmitter', root+'/EventEmitter.js');
   module.provide('Game', root+'/Game.js');
-  module.provide('Rectangle', root+'/Rectangle.js');
 
 
   // Feature support detection

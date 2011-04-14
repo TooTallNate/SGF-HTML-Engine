@@ -13,8 +13,11 @@ module.load('_sgf', 'path', 'inherits', './EventEmitter', function(SGF, path, in
     this['path'] = gameRoot;
     this['container'] = container;
     this['renderables'] = [];
+    // These get incremented once per 'update'/'render' event.
+    this['updateCount'] = this['renderCount'] = 0;
 
     // The container element's margin and padding need to be nullified
+    // TODO: Ensure that the container 'hasLayout', how to do it cross-browser?
     container.style.margin = container.style.padding = '0px';
 
     // So we need to load the 'main.js' of the given game path.
@@ -71,17 +74,38 @@ module.load('_sgf', 'path', 'inherits', './EventEmitter', function(SGF, path, in
   // A renderable may be any Object that contains a 'render'
   // function, though most of the time it will be a SGF
   // class like Circle, Rectangle, Sprite, etc.
-  Game.prototype['add'] = function(renderable) {
+  // 'shouldUpdate' defaults to true, and if true, sets up the
+  // renderable to have it's 'update()' function called when the game
+  // emits 'update'. 'shouldRender' defaults to true as well, and if true
+  // sets up a listener to call the renderable's 'render()' function
+  // when the game emits 'render'.
+  Game.prototype['add'] = function(renderable, shouldUpdate, shouldRender) {
     this['renderables'].push(renderable);
-    this['_s'].appendChild(renderable['_e']);
-//    this['on']('render', renderable.render);
     renderable['parent'] = this;
+    // Add the low-level element to the container node
+    this['_s'].appendChild(renderable['_e']);
+    // The game developer has the option of specifying that a renderable
+    // should not update or render, bases on the 2nd and 3rd arguments respectively
+    if (shouldUpdate !== false) {
+      renderable['_pu'] = function (uc) {
+        renderable['update'] && renderable['update'](uc);
+      }
+      this['on']('update', renderable['_pu']);
+    }
+    if (shouldRender !== false) {
+      renderable['_pr'] = function (rc) {
+        renderable['render'] && renderable['render'](rc);
+      }
+      this['on']('render', renderable['_pr']);
+    }
   }
 
   // Remove a renderable that has previously been added to
   // the game instance with 'add()'.
   Game.prototype['remove'] = function(renderable) {
-
+    
   }
+
+  Game.prototype['toString'] = function() { return '[object Game]'; }
 
 });

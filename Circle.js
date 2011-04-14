@@ -1,1 +1,0 @@
-module.load("_sgf","./EventEmitter",function(b){function a(){this.cy=this.cx=0;this.r=10;this.color="000000";this._e=b._svg("circle",{cx:0,cy:0,r:10,fill:"#000000"})}module.exports=a;a.prototype.render=function(){}});

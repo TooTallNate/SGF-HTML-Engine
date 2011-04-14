@@ -1,6 +1,13 @@
 // SVGGame is in charge of creating the top-level <svg> element
 
+
 module.load('_sgf', 'inherits', './Game', function(SGF, inherits, Game) {
+
+  // 'provide' all the renderable components as their SVG versions.
+  module.provide('Circle', SGF['root']+'/SVGCircle.js');
+  module.provide('Container', SGF['root']+'/SVGContainer.js');
+  module.provide('Rectangle', SGF['root']+'/SVGRectangle.js');
+  module.provide('Sprite', SGF['root']+'/SVGSprite.js');
 
   function SVGGame(path, container) {
 
