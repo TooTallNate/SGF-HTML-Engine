@@ -3,6 +3,7 @@
 // bouncing off the screen boundaries when they're reached...
 
 console.log(game.isRunning() + ": game.isRunning(), outside the factory; should be false");
+console.log(game);
 
 module.load('Circle', function(Circle) {
 
@@ -18,8 +19,8 @@ module.load('Circle', function(Circle) {
   c.setFillColor("#FF0000");
 
   // The direction x and y will each be set to some random value between -5 and 5
-  this.dx = Math.random() * 10 - 10;
-  this.dy = Math.random() * 10 - 10;
+  c.dx = Math.random() * 10 - 10;
+  c.dy = Math.random() * 10 - 10;
 
   // The 'update()' function will be called for every 'update' event the game
   // instance emits (after the call to 'add()' below). We set up custom logic
