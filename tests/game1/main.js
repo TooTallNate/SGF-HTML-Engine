@@ -9,8 +9,8 @@ module.load('Circle', function(Circle) {
   // Create a 'Circle'
   var c = new Circle();
   // Start at the center of the game screen
-  c.cx = game.width / 2;
-  c.cy = game.height / 2;
+  //c.cx = game.width / 2;
+  //c.cy = game.height / 2;
   // Set a default radius of 25 pixels
   c.r = 25;
   c.strokeWidth = 5;
